@@ -55,7 +55,7 @@ body {
     overflow-y: auto;
 }
 
-.footer {
+footer {
     overflow: hidden;
     background-color: dodgerblue;
     padding: 20px 10px;
@@ -65,7 +65,7 @@ body {
     margin : 20px auto;
 }
 
-.footer a {
+footer a {
     color: black;
     text-align: center;
     padding: 12px;
@@ -73,11 +73,11 @@ body {
     font-size: 18px;
     line-height: 25px;
 }
-.footer a:hover {
+footer a:hover {
     background-color: deepskyblue;
     color: black;
 }
-.footer a.active {
+footer a.active {
     background-color: dodgerblue;
     color: white;
 }
