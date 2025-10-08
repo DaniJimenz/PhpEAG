@@ -1,9 +1,8 @@
 <?php
 
-define('SITE_NAME', 'Mi Sitio Web');
+define('SITE_NAME', 'Mi primera página PHP');
 define('SITE_URL', 'http://localhost');
 define('SITE_DESCRIPTION', 'Un sitio web modular con PHP');
-
 
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'mi_sitio');
