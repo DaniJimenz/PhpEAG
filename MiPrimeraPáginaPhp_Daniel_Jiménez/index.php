@@ -1,3 +1,16 @@
+<?php
+
+require 'config/config.php';
+
+// Sistema de rutas con $_GET
+$page = $_GET['pages'] ?? 'inicio';
+$allowed_pages = ['inicio', 'about', 'contact', 'services'];
+if (!in_array($page, $allowed_pages)) {
+    $page = 'inicio';
+}
+
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -5,7 +18,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title><?php echo SITE_NAME ?></title>
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
@@ -13,6 +26,7 @@
         $nombre = "Dani";
         $edad = 25;
         $ciudad = "Granada";
+        $profesion = "Desarrollo de Aplicaciones Web";
     ?>
     <header>
         <?php
@@ -21,16 +35,10 @@
     </header>
 
     <main>
-        <div class='descripcion'>
-            <div class = 'frase' > Hola, me llamo <?php echo $nombre; ?>, tengo <?php echo $edad; ?> años y vivo en <?php echo $ciudad; ?> </div>
-
-            <div class = 'hora' > La hora actual es: <?php echo date("H:i:s"); ?> </div>
-
-            <div class = 'fecha' > La fecha actual es: <?php echo date("d/m/Y"); ?> </div>
-        </div>
+        <?php include "./pages/{$page}.php"; ?>
     </main>
 
-    <footer>
+
         <?php
             include 'includes/footer.php';
         ?>
