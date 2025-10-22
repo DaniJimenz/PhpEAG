@@ -16,6 +16,7 @@ body {
     border-radius: 10px;
     border: solid 1px darkblue;
     width: 50%;
+    margin: 20px auto;
 }
 
 .header a {
@@ -61,6 +62,7 @@ body {
     border-radius: 10px;
     border: solid 1px darkblue;
     width: 50%;
+    margin: 20px auto;
 }
 
 .footer a {
