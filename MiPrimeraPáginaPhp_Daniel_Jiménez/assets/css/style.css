@@ -55,15 +55,7 @@ body {
     overflow-y: auto;
 }
 
-.footer a {
-    color: black;
-    text-align: center;
-    padding: 12px;
-    text-decoration: none;
-    font-size: 18px;
-    line-height: 25px;
-}
-.footer {
+.footer{
     overflow: hidden;
     background-color: dodgerblue;
     padding: 20px 10px;
@@ -72,6 +64,16 @@ body {
     width: 50%;
     margin: 20px auto;
 }
+
+.footer a {
+    color: black;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 25px;
+}
+
 .footer a:hover {
     background-color: deepskyblue;
     color: black;

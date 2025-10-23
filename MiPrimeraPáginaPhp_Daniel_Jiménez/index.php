@@ -37,8 +37,6 @@ if (!in_array($page, $allowed_pages)) {
     <main>
         <?php include "./pages/{$page}.php"; ?>
     </main>
-
-
         <?php
             include 'includes/footer.php';
         ?>
