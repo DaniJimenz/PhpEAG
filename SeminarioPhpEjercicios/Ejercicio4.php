@@ -8,6 +8,8 @@ echo "Introduce una palabra:";
 $palabra = readline();
 function esPalindromo($palabra){
 
+    
+
 
 }
 
