@@ -19,6 +19,6 @@ function fibonacci($numero){
     }
 }
 $resultado = fibonacci($numero);
-echo " El término F($numero) de fibonacci es: $resultado";
+echo "El término F($numero) de fibonacci es: $resultado";
 
 ?>
