@@ -11,15 +11,13 @@
 echo "Introduce una cadena con formato Emmet: ";
 $emmet = readline();
 
-function generarEtiquetaHTML($emmet) {
+function generarEtiquetaHTML($emmet)
+{
     if (!is_string($emmet) || empty($emmet)) { // Verifico si la entrada es una cadena de texto no vacía
         return "La entrada debe ser una cadena de texto no vacía.";
     }
     $tag = '';
     $class = '';
     $id = '';
-
-
-
 
 }

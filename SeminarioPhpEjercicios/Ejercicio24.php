@@ -8,7 +8,6 @@
 define("DESCUENTO_ESTUDIANTE", 0.15);
 define("DESCUENTO_JUBILADO", 0.20);
 define("DESCUENTO_VIP", 0.25);
-
 function calcularPrecioFinal($precio, $tipoCliente) {
     if (!is_numeric($precio) || $precio < 0) {
         return "Error: El precio debe ser un número no negativo.";

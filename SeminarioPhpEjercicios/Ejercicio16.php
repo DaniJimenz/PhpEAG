@@ -20,7 +20,6 @@ function productoArray($array) {
     return $producto;
 }
 
-
 echo "Introduce números separados por comas: ";
 $array = readline();
 $numero = array_map('intval', explode(',', $array)); // Convierte la entrada en un array de enteros

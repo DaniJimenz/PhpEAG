@@ -7,7 +7,6 @@
 
 echo "Introduce una cadena de texto: ";
 $cadena = readline();
-
 function eliminarVocales($texto) {
     $vocales = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U']; // Defino las vocales a eliminar
     return str_replace($vocales, '', $texto); // Reemplazo las vocales por una cadena vacía

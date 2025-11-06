@@ -7,7 +7,6 @@ echo "Introduce el primer número:";
 $numero1 = readline();
 echo "Introduce el segundo número:";
 $numero2 = readline();
-
 function mcd($a, $b){ // Máximo común divisor usando el algoritmo de Euclides
     while ($b != 0) { // Mientras b no sea cero
         $temporal = $b; // Guardo el valor de b en una variable temporal

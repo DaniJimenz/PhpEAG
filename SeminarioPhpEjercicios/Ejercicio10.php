@@ -5,7 +5,6 @@
 
 echo "Introduce un número natural:";
 $numero = readline();
-
 function fibonacci($numero){
     if (!is_numeric($numero) || $numero < 0 ) { // Valido que el número sea numérico y natural
         return "Número no válido";

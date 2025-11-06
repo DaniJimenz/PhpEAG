@@ -7,7 +7,6 @@
 
 echo "Introduce un número: ";
 $numero = (int)readline();
-
 function esPerfecto($num) {
     if (!is_int($num) || $num <= 0) { // Verifico si la entrada es un número entero positivo
         return "No es un número entero positivo.";

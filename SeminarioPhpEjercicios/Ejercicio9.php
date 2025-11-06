@@ -7,7 +7,6 @@ echo "Introduce un número natural:";
 $num1 = readline();
 echo "Introduce otro número natural:";
 $num2 = readline();
-
 function maxComuDivi($num1, $num2){
     if (!is_numeric($num1) || !is_numeric($num2) || $num1 < 0 || $num2 < 0 ) { // Valido que los números sean numéricos y naturales
         return "Número no válido";

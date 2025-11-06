@@ -5,7 +5,6 @@
 
 echo "Introduce un número:";
 $numero = readline();
-
 function esCapicua($numero){
     $numero = strval($numero); // Convierto el número a cadena de texto para poder acceder a sus dígitos
     $longitud = strlen($numero); // Obtengo la longitud de la cadena

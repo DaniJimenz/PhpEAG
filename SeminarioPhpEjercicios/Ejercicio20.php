@@ -6,7 +6,6 @@
 
 echo "Introduce un número: ";
 $num = (int)readline();
-
 function factorial($num) {
     if (!is_int($num) || $num < 0) { // Verifico si no es negativo
         return "Error: La entrada debe ser un número entero no negativo.";

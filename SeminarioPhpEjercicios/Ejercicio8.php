@@ -5,7 +5,6 @@
 
 echo "Introduce un número:";
 $numero = readline();
-
 function sumarDigitos($numero){
     if (!is_numeric($numero) || $numero < 10 || 0 ) { // Valido que el número sea numérico y tenga al menos dos dígitos
         return "Número no válido";

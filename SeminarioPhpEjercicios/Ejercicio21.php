@@ -5,7 +5,6 @@
 
 echo "Introduce una cadena de texto: ";
 $cadena = readline();
-
 function invertirCadena($cadena) {
     if (!is_string($cadena)) { // Verifico si la entrada es una cadena de texto
         return "La entrada debe ser texto.";

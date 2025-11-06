@@ -7,7 +7,6 @@
 
 echo "Introduce una cadena de texto: ";
 $cadena = readline();
-
 function esPalindromo($cadena) {
     if (!is_string($cadena)) { // Verifico es una cadena de texto
         return "La entrada debe ser texto.";
@@ -20,7 +19,6 @@ function esPalindromo($cadena) {
     }
     return true;
 }
-
 if(esPalindromo($cadena)){
     echo "La cadena $cadena es un palíndromo.";
 } else {
