@@ -3,16 +3,16 @@
 //Ejercicio 11. Números primos relativos
 //Crea una función que determine si dos números son primos relativos
 
-echo "Introduce el primer número natural:";
+echo "Introduce el primer número:";
 $numero1 = readline();
-echo "Introduce el segundo número natural:";
+echo "Introduce el segundo número:";
 $numero2 = readline();
 
-function mcd($a, $b){
-    while ($b != 0) {
-        $temporal = $b;
-        $b = $a % $b;
-        $a = $temporal;
+function mcd($a, $b){ // Máximo común divisor usando el algoritmo de Euclides
+    while ($b != 0) { // Mientras b no sea cero
+        $temporal = $b; // Guardo el valor de b en una variable temporal
+        $b = $a % $b; // Actualizo b con el resto de a dividido por b
+        $a = $temporal; // Actualizo a con el valor temporal
     }
     return $a;
 }
