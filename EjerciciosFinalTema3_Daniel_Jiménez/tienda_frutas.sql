@@ -34,9 +34,15 @@ CREATE TABLE pedidos (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id));
 );
 
-INSERT INTO categorías (nombre) VALUES 'Cítricos', 'Frutas Rojas', 'Tropicales' ;
-INSERT INTO productos (nombre, categoria_id, precio, stock) VALUES ''
+//Insertar categorías y productos de ejemplo
 
+INSERT INTO categorías (nombre) VALUES ('Cítricos', 'Frutas Rojas', 'Tropicales') ;
+INSERT INTO productos (nombre, categoria_id, precio, stock) VALUES
+('Limón', 1, 1.50, 250) ;
+('Naranja', 1, 1.00, 100) ;
+('Fresa', 2, 2.00, 150) ;
+
+//Obtener productos ordenados de menor a mayor precio
 
 
 
