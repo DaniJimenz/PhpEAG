@@ -176,7 +176,7 @@
 
             echo "<h3>Actualizar precios y stock</h3>";
 
-            $pdo->exec("UPDATE productos SET precio = precio * 1.10 WHERE categoria = 3"); //Aumentar en 10% precios de productos tropicales
+            $pdo->exec("UPDATE productos SET precio = precio * 1.10 WHERE categoria_id = 3"); //Aumentar en 10% precios de productos tropicales
             echo "<p class='success'>Los precios de los productos tropicales han subido un 10% más</p>";
 
             $stmt = $pdo->prepare("SELECT stock FROM productos WHERE nombre = :nombre"); //Reducir stock de 'Fresa' en 5 unidades
@@ -193,16 +193,114 @@
             $pdo->exec("UPDATE productos SET eliminado = 1 WHERE stock = 0");
             echo "<p class='success'>Productos sin stock eliminados</p>";
 
+            // 8. Reportes y análisis
 
+            echo "<h3> Análisis y Reportes</h3>";
+            //Productos más vendidos
+            echo "<h4>a) Productos más vendidos</h4>";
+            $stmt = $pdo->query("
+                SELECT p.nombre AS producto, SUM(dp.cantidad) AS total_vendido
+                FROM detalles_pedidos dp
+                INNER JOIN productos p ON dp.producto_id = p.id
+                GROUP BY p.id
+                ORDER BY total_vendido DESC
+                LIMIT 5
+            ");
+            $productosMasVendidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            // Mostrar resultados
+            if (count($productosMasVendidos) > 0) {
+                echo "<table style='width: 100%; border-collapse: collapse;'>";
+                echo "<tr style='background: #f4f4f4;'>";
+                echo "<th style='padding: 10px; border: 1px solid #ddd;'>Producto</th>";
+                echo "<th style='padding: 10px; border: 1px solid #ddd;'>Total Vendido</th>";
+                echo "</tr>";
+                foreach ($productosMasVendidos as $producto) {
+                    echo "<tr>";
+                    echo "<td style='padding: 10px; border: 1px solid #ddd;'>{$producto['producto']}</td>";
+                    echo "<td style='padding: 10px; border: 1px solid #ddd;'>{$producto['total_vendido']}</td>";
+                    echo "</tr>";
+                }
+                echo "</table>";
+            } else {
+                echo "<p class='info'>No hay datos de ventas disponibles.</p>";
+            }
+            // Ingresos totales por categoría
+            echo "<h4>b) Ingresos totales por categoría</h4>";
+            $stmt = $pdo->query("
+                SELECT c.nombre AS categoria, SUM(p.precio * dp.cantidad) AS ingresos_totales
+                FROM detalles_pedidos dp
+                INNER JOIN productos p ON dp.producto_id = p.id
+                INNER JOIN categorias c ON p.categoria_id = c.id
+                GROUP BY c.id
+                ORDER BY ingresos_totales DESC
+            ");
+            $ingresosPorCategoria = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+            if (count($ingresosPorCategoria) > 0) {
+                echo "<table style='width: 100%; border-collapse: collapse;'>";
+                echo "<tr style='background: #f4f4f4;'>";
+                echo "<th style='padding: 10px; border: 1px solid #ddd;'>Categoría</th>";
+                echo "<th style='padding: 10px; border: 1px solid #ddd;'>Ingresos Totales</th>";
+                echo "</tr>";
+                foreach ($ingresosPorCategoria as $categoria) {
+                    echo "<tr>";
+                    echo "<td style='padding: 10px; border: 1px solid #ddd;'>{$categoria['categoria']}</td>";
+                    echo "<td style='padding: 10px; border: 1px solid #ddd;'>{$categoria['ingresos_totales']}</td>";
+                    echo "</tr>";
+                }
+                echo "</table>";
+            } else {
+                echo "<p class='info'>No hay datos de ingresos disponibles.</p>";
+            }
+            //Productos con bajo stock < 10 unidades
+            echo "<h4>c) Productos con bajo stock (&lt; 10 unidades)</h4>";
+            $stmt = $pdo->query("SELECT nombre, stock FROM productos WHERE stock < 10");
+            $productosBajoStock = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+            if (count($productosBajoStock) > 0) {
+                echo "<table style='width: 100%; border-collapse: collapse;'>";
+                echo "<tr style='background: #f4f4f4;'>";
+                echo "<th style='padding: 10px; border: 1px solid #ddd;'>Producto</th>";
+                echo "<th style='padding: 10px; border: 1px solid #ddd;'>Stock</th>";
+                echo "</tr>";
+                foreach ($productosBajoStock as $producto) {
+                    echo "<tr>";
+                    echo "<td style='padding: 10px; border: 1px solid #ddd;'>{$producto['nombre']}</td>";
+                    echo "<td style='padding: 10px; border: 1px solid #ddd;'>{$producto['stock']}</td>";
+                    echo "</tr>";
+                }
+                echo "</table>";
+            } else {
+                echo "<p class='info'>No hay productos con bajo stock.</p>";
+            }
+            //Usuarios con más compras
+            echo "<h4>d) Usuarios con más compras</h4>";
+            $stmt = $pdo->query("
+                SELECT u.nombre AS usuario, COUNT(p.id) AS total_compras
+                FROM pedidos p
+                INNER JOIN usuarios u ON p.usuario_id = u.id
+                GROUP BY u.id
+                ORDER BY total_compras DESC
+                LIMIT 5
+            ");
+            $usuariosConMasCompras = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
-
-
-
-
-
+            if (count($usuariosConMasCompras) > 0) {
+                echo "<table style='width: 100%; border-collapse: collapse;'>";
+                echo "<tr style='background: #f4f4f4;'>";
+                echo "<th style='padding: 10px; border: 1px solid #ddd;'>Usuario</th>";
+                echo "<th style='padding: 10px; border: 1px solid #ddd;'>Total Compras</th>";
+                echo "</tr>";
+                foreach ($usuariosConMasCompras as $usuario) {
+                    echo "<tr>";
+                    echo "<td style='padding: 10px; border: 1px solid #ddd;'>{$usuario['usuario']}</td>";
+                    echo "<td style='padding: 10px; border: 1px solid #ddd;'>{$usuario['total_compras']}</td>";
+                    echo "</tr>";
+                }
+                echo "</table>";
+            } else {
+                echo "<p class='info'>No hay datos de usuarios disponibles.</p>";
+            }
 
             // Mostrar usuarios
             echo "<h2>👥 Usuarios en la base de datos</h2>";
