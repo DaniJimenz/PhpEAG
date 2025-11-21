@@ -71,28 +71,139 @@
             $version = $pdo->query('SELECT VERSION()')->fetchColumn();
             echo "<p class='info'>MariaDB versión: $version</p>";
             
-            // Crear tabla de ejemplo si no existe
+            // 1.Crear tablas
             $pdo->exec("
+                CREATE TABLE IF NOT EXISTS categorias (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    nombre VARCHAR(100) NOT NULL,
+                    descripcion VARCHAR(255) DEFAULT NULL
+                );
+                
+                CREATE TABLE IF NOT EXISTS productos (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    nombre VARCHAR(100) NOT NULL,
+                    categoria_id INT NOT NULL,
+                    precio DECIMAL(10, 2) NOT NULL,
+                    stock INT DEFAULT 0,
+                    
+                    FOREIGN KEY (categoria_id) REFERENCES categorias(id)
+                );
+                
                 CREATE TABLE IF NOT EXISTS usuarios (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     nombre VARCHAR(100) NOT NULL,
                     email VARCHAR(100) NOT NULL,
-                    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                )
+                    contraseña VARCHAR(100) NOT NULL
+                );
+                
+                CREATE TABLE IF NOT EXISTS pedidos (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    usuario_id INT NOT NULL,
+                    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    total DECIMAL(10, 2),
+                    
+                    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+                );
             ");
+
             
-            // Insertar datos de ejemplo si la tabla está vacía
-            $count = $pdo->query("SELECT COUNT(*) FROM usuarios")->fetchColumn();
-            if ($count == 0) {
+            // 2.Insertar datos
+            $countCat = $pdo->query("SELECT COUNT(*) FROM categorias")->fetchColumn();
+
+            if ($countCat == 0) {
                 $pdo->exec("
-                    INSERT INTO usuarios (nombre, email) VALUES 
-                    ('Juan Pérez', 'juan@ejemplo.com'),
-                    ('María García', 'maria@ejemplo.com'),
-                    ('Carlos López', 'carlos@ejemplo.com')
+                    INSERT INTO categorias (id, nombre, descripcion) VALUES 
+                    (1, 'Cítricos', 'Frutas ácidas'),
+                    (2, 'Frutas Rojas', 'Frutos del bosque'),
+                    (3, 'Tropicales', 'Frutas exóticas')
                 ");
-                echo "<p class='success'>✅ Datos de ejemplo insertados</p>";
+                echo "<p class='success'>Categorías insertadas correctamente</p>";
+            } else {
+                echo "<p class='info'>Las categorías ya existían</p>";
             }
-            
+
+            $countProd = $pdo->query("SELECT COUNT(*) FROM productos")->fetchColumn();
+
+            if ($countProd == 0) {
+                $pdo->exec("
+                    INSERT INTO productos (nombre, categoria_id, precio, stock) VALUES 
+                    ('Naranja', 1, 1.50, 100),
+                    ('Limón', 1, 1.20, 80),
+                    ('Mandarina', 1, 1.80, 90),
+                    ('Pomelo', 1, 2.00, 50),
+                    ('Fresa', 2, 3.50, 15),
+                    ('Arándano', 2, 4.00, 10),
+                    ('Frambuesa', 2, 3.80, 25),
+                    ('Plátano', 3, 1.10, 200),
+                    ('Mango', 3, 2.50, 30),
+                    ('Piña', 3, 3.00, 40)
+                ");
+                echo "<p class='success'>Productos insertados correctamente</p>";
+            } else {
+                echo "<p class='info'>Los productos ya existían</p>";
+            }
+
+            // 3.Consultas Select Básicas
+
+            echo "<h3> 1. Productos ordenados precio ascendente</h3>";
+            $stmt = $pdo->query("SELECT * FROM productos ORDER BY precio ASC");
+            $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            echo "<h3> 2. Productos de categoría 'Cítricos'</h3>";
+            $stmt = $pdo->query("SELECT * FROM productos WHERE categoria_id = 1");
+            $productosCitricos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            echo "<h3> 3. Productos con stock menor a 20</h3>";
+            $stmt = $pdo->query("SELECT * FROM productos WHERE stock < 20");
+            $productosBajoStock = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            echo "<h3> 4. Contar total de productos</h3>";
+            $totalProductos = $pdo->query("SELECT COUNT(*) FROM productos")->fetchColumn();
+            echo "<p class='info'>Total de productos: $totalProductos</p>";
+
+            //4. Inner Join productos con categoria
+
+            echo "<h3>Productos con sus categorías</h3>";
+            $stmt = $pdo->query("
+                SELECT p.nombre AS producto, p.precio, c.nombre AS categoria
+                FROM productos p
+                INNER JOIN categorias c ON p.categoria_id = c.id
+                ORDER BY c.nombre, p.precio
+            ");
+            $productosConCategorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            //5. Update - Cambiar precios y stock
+
+            echo "<h3>Actualizar precios y stock</h3>";
+
+            $pdo->exec("UPDATE productos SET precio = precio * 1.10 WHERE categoria = 3"); //Aumentar en 10% precios de productos tropicales
+            echo "<p class='success'>Los precios de los productos tropicales han subido un 10% más</p>";
+
+            $stmt = $pdo->prepare("SELECT stock FROM productos WHERE nombre = :nombre"); //Reducir stock de 'Fresa' en 5 unidades
+            $stmt->execute(['nombre' => 'Fresa']);
+            $stockActual = $stmt->fetchColumn();
+            $nuevaCantidad = max(0, $stockActual - 5); // Evitar stock negativo
+            $stmt = $pdo->prepare("UPDATE productos SET stock = :stock WHERE nombre = :nombre");
+            $stmt->execute(['stock' => $nuevaCantidad, 'nombre' => 'Fresa']);
+            echo "<p class='success'>El stock de fresa ha bajado 5 unidades</p>";
+
+            // 6. Delete - Eliminar productos sin stock
+
+            $pdo->exec("ALTER TABLE productos ADD COLUMN IF NOT EXISTS eliminado DEFAULT 0");
+            $pdo->exec("UPDATE productos SET eliminado = 1 WHERE stock = 0");
+            echo "<p class='success'>Productos sin stock eliminados</p>";
+
+
+
+
+
+
+
+
+
+
+
+
             // Mostrar usuarios
             echo "<h2>👥 Usuarios en la base de datos</h2>";
             $stmt = $pdo->query("SELECT * FROM usuarios ORDER BY id");
